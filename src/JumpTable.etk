@@ -1,0 +1,63 @@
+# Jump table                                            TODO: optimize this (alphanumeric order, view functions last, etc.)
+# ----------
+dup1                                                    # [selector, selector]
+push4 selector("name()")                                # ["name()", selector, selector]
+eq                                                      # [selector == "name()", selector]
+%push(name)                                             # [name, selector == "name()", selector]
+jumpi                                                   # [selector] jump to name label if selector == "name()", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("symbol()")                              # ["symbol()", selector, selector]
+eq                                                      # [selector == "symbol()", selector]
+%push(symbol)                                           # [symbol, selector == "symbol()", selector]
+jumpi                                                   # [selector] jump to symbol label if selector == "symbol()", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("decimals()")                            # ["decimals()", selector, selector]
+eq                                                      # [selector == "decimals()", selector]
+%push(decimals)                                         # [decimals, selector == "decimals()", selector]
+jumpi                                                   # [selector] jump to decimals label if selector == "decimals()", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("totalSupply()")                         # ["totalSupply()", selector, selector]
+eq                                                      # [selector == "totalSupply()", selector]
+%push(totalSupply)                                      # [totalSupply, selector == "totalSupply()", selector]
+jumpi                                                   # [selector] jump to totalSupply label if selector == "totalSupply()", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("balanceOf(address)")                    # ["balanceOf(address)", selector, selector]
+eq                                                      # [selector == "balanceOf(address)", selector]
+%push(balanceOf)                                        # [balanceOf, selector == "balanceOf(address)", selector]
+jumpi                                                   # [selector] jump to balanceOf label if selector == "balanceOf(address)", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("transfer(address,uint256)")             # ["transfer(address,uint256)", selector, selector]
+eq                                                      # [selector == "transfer(address,uint256)", selector]
+%push(transfer)                                         # [transfer, selector == "transfer(address,uint256)", selector]
+jumpi                                                   # [selector] jump to transfer label if selector == "transfer(address,uint256)", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("transferFrom(address,address,uint256)") # ["transferFrom(address,address,uint256)", selector, selector]
+eq                                                      # [selector == "transferFrom(address,address,uint256)", selector]
+%push(transferFrom)                                     # [transferFrom, selector == "transferFrom(address,address,uint256)", selector]
+jumpi                                                   # [selector] jump to transferFrom label if selector == "transferFrom(address,address,uint256)", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("approve(address,uint256)")              # ["approve(address,uint256)", selector, selector]
+eq                                                      # [selector == "approve(address,uint256)", selector]
+%push(approve)                                          # [approve, selector == "approve(address,uint256)", selector]
+jumpi                                                   # [selector] jump to approve label if selector == "approve(address,uint256)", otherwise continue
+
+dup1                                                    # [selector, selector]
+push4 selector("allowance(address,address)")            # ["allowance(address,address)", selector, selector]
+eq                                                      # [selector == "allowance(address,address)", selector]
+%push(allowance)                                        # [allowance, selector == "allowance(address,address)", selector]
+jumpi                                                   # [selector] jump to allowance label if selector == "allowance(address,address)", otherwise continue
+
+# Invalid function selector
+# -------------------------
+fail:
+jumpdest
+push1 0                                                 # [0, selector]
+push1 0                                                 # [0, 0, selector]
+revert                                                  # [selector]

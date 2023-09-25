@@ -1,0 +1,9 @@
+totalSupply:                                            # totalSupply() public view returns (uint256)
+jumpdest
+push1 3                                                 # [3, selector]
+sload                                                   # [totalSupply, selector]
+push1 0                                                 # [0, totalSupply, selector]
+mstore                                                  # [selector] {(0:31, totalSupply)}
+push1 32                                                # [32, selector] {(0:31, totalSupply)}
+push1 0                                                 # [0, 32, selector] {(0:31, totalSupply)}
+return

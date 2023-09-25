@@ -1,0 +1,15 @@
+balanceOf:                                              # balanceOf(address _owner) public view returns (uint256 balance)
+jumpdest
+push1 4                                                 # [4, selector]
+calldataload                                            # [_owner32, selector]
+push1 0                                                 # [0, _owner32, selector]
+mstore                                                  # [selector] {(0:31, _owner32)}
+push1 32                                                # [32, selector] {(0:31, _owner32)}
+push1 0                                                 # [0, 32, selector] {(0:31, _owner32)}
+keccak256                                               # [hash, selector]
+sload                                                   # [balance, selector] 
+push1 0                                                 # [0, balance, selector]
+mstore                                                  # [selector] {(0:31, balance)}
+push1 32                                                # [32, selector] {(0:31, balance)}
+push1 0                                                 # [0, 32, selector] {(0:31, balance)}
+return

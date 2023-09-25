@@ -59,7 +59,7 @@ push1 2                                                 # [2, 18]
 sstore  
 
 # Total supply (21,000,000 tokens)
-push32 21000000                                         # [21000000]
+push32 21000000000000000000000000                       # [21000000]
 push1 3                                                 # [3, 21000000]
 sstore                                                  # []
 
@@ -69,13 +69,13 @@ push1 4                                                 # [4, contract deployer]
 sstore                                                  # []
 
 # Total supply to contract deployer
-push32 21000000                                         # [21000000]
+push32 21000000000000000000000000                       # [21000000]
 caller                                                  # [contract deployer, 21000000] <- key of the mapping
 push1 0                                                 # [0, contract deployer, 21000000]
-mstore                                                  # [21000000] {(0:32, contract deployer)} 
+mstore                                                  # [21000000] {(0:31, contract deployer)} 
 
-push1 32                                                # [32, 21000000] {(0:32, contract deployer)}
-push1 0                                                 # [0, 32, 21000000] {(0:32, contract deployer)}
+push1 32                                                # [32, 21000000] {(0:31, contract deployer)}
+push1 0                                                 # [0, 32, 21000000] {(0:31, contract deployer)}
 keccak256                                               # [sha3(contract deployer), 21000000]
 sstore                                                  # []
 

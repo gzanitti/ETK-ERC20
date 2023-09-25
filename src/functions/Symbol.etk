@@ -1,0 +1,9 @@
+symbol:                                                 # symbol() public view returns (string)
+jumpdest
+push1 1                                                 # [1, selector]
+sload                                                   # [symbol, selector]
+push1 0                                                 # [0, symbol, selector]
+mstore                                                  # [selector] {(0:31, symbol)}
+push1 32                                                # [32, selector] {(0:31, symbol)}
+push1 0                                                 # [0, 32, selector] {(0:31, symbol)}
+return

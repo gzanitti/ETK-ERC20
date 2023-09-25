@@ -1,0 +1,9 @@
+decimals:                                               # decimals() public view returns (uint8)
+jumpdest
+push1 2                                                 # [2, selector]
+sload                                                   # [decimals, selector]
+push1 0                                                 # [0, decimals, selector]
+mstore                                                  # [selector] {(0:31, decimals)}
+push1 32                                                # [32, selector] {(0:31, decimals)}
+push1 0                                                 # [0, 32, selector] {(0:31, decimals)}
+return

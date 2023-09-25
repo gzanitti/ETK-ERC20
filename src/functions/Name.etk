@@ -1,0 +1,9 @@
+name:                                                   # name() public view returns (string)
+jumpdest
+push1 0                                                 # [0, selector]
+sload                                                   # [name, selector]
+push1 0                                                 # [0, name, selector]
+mstore                                                  # [selector] {(0:31, name)}
+push1 32                                                # [32, selector] {(0:31, name)}
+push1 0                                                 # [0, 32, selector] {(0:31, name)}
+return  

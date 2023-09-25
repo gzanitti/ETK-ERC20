@@ -1,0 +1,43 @@
+transfer:                                               # transfer(address _to, uint256 _value) public returns (bool success)
+jumpdest
+caller                                                  # [caller, selector]
+push1 0                                                 # [0, caller, selector]
+mstore                                                  # [selector] {(0:31, caller)}
+push1 32                                                # [32, selector] {(0:31, caller)}
+push1 0                                                 # [0, 32, selector] {(0:31, caller)}
+keccak256                                               # [hash, selector]
+dup1                                                    # [hash, hash, selector]
+sload                                                   # [balance, hash, selector]
+push1 36                                                # [36, balance, hash, selector]
+calldataload                                            # [_value32, balance, hash, selector]
+dup2                                                    # [balance, _value32, balance, hash, selector]
+dup2                                                    # [_value32, balance, _value32, balance, hash, selector]
+gt                                                      # [_value32 > balance, _value32, balance, hash, selector]
+%push(fail)                                             # [fail, _value32 > balance, _value32, balance, hash, selector]
+jumpi                                                   # [_value32, balance, hash, selector] jump to fail label if _value32 > balance, otherwise continue
+
+push1 4                                                 # [4, _value32, balance, hash, selector]
+calldataload                                            # [_to32, _value32, balance, hash, selector]
+push1 0                                                 # [0, _to32, _value32, balance, hash, selector]
+mstore                                                  # [_value32, balance, hash, selector] {(0:31, _to32)}
+push1 32                                                # [32, _value32, balance, hash, selector] {(0:31, _to32)}
+push1 0                                                 # [0, 32, _value32, balance, hash, selector] {(0:31, _to32)}
+keccak256                                               # [to_hash, _value32, balance, hash, selector] {(0:31, _to32)}
+dup1                                                    # [to_hash, to_hash, _value32, balance, hash, selector] 
+sload                                                   # [to_balance, to_hash, _value32, balance, hash, selector] 
+dup3                                                    # [_value32, to_balance, to_hash, _value32, balance, hash, selector] 
+add                                                     # [_value32 + to_balance, to_hash, _value32, balance, hash, selector]
+swap1                                                   # [to_hash, _value32 + to_balance, _value32, balance, hash, selector]
+sstore                                                  # [_value32, balance, hash, selector]
+
+swap1                                                   # [balance, _value32, hash, selector]
+sub                                                     # [balance - _value32, hash, selector]
+swap1                                                   # [hash, balance - _value32, selector]
+sstore                                                  # [selector]
+
+push32 1                                                # [1, selector]
+push1 0                                                 # [0, 1, selector]
+mstore                                                  # [selector] {(0:31, 1)}
+push1 32                                                # [32, selector] {(0:31, 1)}
+push1 0                                                 # [0, 32, selector] {(0:31, 1)}
+return

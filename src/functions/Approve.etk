@@ -1,0 +1,22 @@
+approve:                                                # approve(address _spender, uint256 _value) public returns (bool success)
+jumpdest
+caller                                                  # [caller, selector]
+push1 0                                                 # [0, caller, selector]
+mstore                                                  # [selector] {(0:31, caller)}
+push1 36                                                # [36, selector] {(0:31, caller)}
+calldataload                                            # [_value, selector] {(0:31, caller)}
+push1 4                                                 # [4, _value, selector] {(0:31, caller)}
+calldataload                                            # [_spender32, _value, selector] {(0:31, caller)}
+push1 32                                                # [32, _spender32, _value, selector] {(0:31, caller)}
+mstore                                                  # [_value, selector] {(0:31, caller), (32:63, _spender32)}
+push1 0                                                 # [0, _value, selector] {(0:31, caller), (32:63, _spender32)}
+push1 64                                                # [64, 0, _value, selector] {(0:31, caller), (32:63, _spender32)}
+keccak256                                               # [hash, _value, selector]
+sstore                                                  # [selector]
+
+push32 1                                                # [1, selector]
+push1 0                                                 # [0, 1, selector]
+mstore                                                  # [selector] {(0:31, 1)}
+push1 32                                                # [32, selector] {(0:31, 1)}
+push1 0                                                 # [0, 32, selector] {(0:31, 1)}
+return
