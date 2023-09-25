@@ -1,0 +1,100 @@
+# ERc20 Token Storage Layout
+# -------------------------
+# Name slot = 0x00
+# Symbol slot = 0x01
+# Decimals slot = 0x02
+# Total Supply slot = 0x03
+# Owner slot = 0x04
+# BalanceOf slot = 0x05
+# Allowance slot = 0x06
+
+
+# ERC20 Token Standard Interface
+# ------------------------------
+# function name() public view returns (string)
+# function symbol() public view returns (string)
+# function decimals() public view returns (uint8)
+# function totalSupply() public view returns (uint256)
+# function balanceOf(address _owner) public view returns (uint256 balance)
+# function transfer(address _to, uint256 _value) public returns (bool success)
+# function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
+# function approve(address _spender, uint256 _value) public returns (bool success)
+# function allowance(address _owner, address _spender) public view returns (uint256 remaining)
+
+# event Approval(address indexed owner, address indexed spender, uint256 value)
+# event Transfer(address indexed from, address indexed to, uint value)
+
+
+# NON-PAYABLE CONSTRUCTOR
+# -----------------------
+callvalue                                               # [callvalue]
+iszero                                                  # [callvalue == 0]
+%push(constructor)                                      # [constructor, callvalue == 0]
+jumpi                                                   # jump to constructor label if callvalue == 0, otherwise continue (revert)
+push1 0                                                 # [0]
+dup1                                                    # [0, 0]
+revert                                                  # []
+
+# CONSTRUCTOR
+# -----------
+
+# Initialize name, symbol, total supply, owner, and balance of owner
+# ------------------------------------------------------------------
+constructor:
+jumpdest
+
+# Name (EVM Toolkit Token)
+push32 0x45564d20546f6f6c6b697420546f6b656e             # ["EVM Toolkit Token"]
+push1 0                                                 # [0, "EVM Toolkit Token"]
+sstore                                                  # []
+
+# Symbol (ETK)
+push32 0x45544b                                         # ["ETK"]
+push1 1                                                 # [1, "ETK"]
+sstore                                                  # []
+
+# Decimals (18)
+push1 18                                                # [18]
+push1 2                                                 # [2, 18]
+sstore  
+
+# Total supply (21,000,000 tokens)
+push32 21000000                                         # [21000000]
+push1 3                                                 # [3, 21000000]
+sstore                                                  # []
+
+# Owner (contract deployer)
+caller                                                  # [contract deployer]
+push1 4                                                 # [4, contract deployer]
+sstore                                                  # []
+
+# Total supply to contract deployer
+push32 21000000                                         # [21000000]
+caller                                                  # [contract deployer, 21000000] <- key of the mapping
+push1 0                                                 # [0, contract deployer, 21000000]
+mstore                                                  # [21000000] {(0:32, contract deployer)} 
+
+push1 32                                                # [32, 21000000] {(0:32, contract deployer)}
+push1 0                                                 # [0, 32, 21000000] {(0:32, contract deployer)}
+keccak256                                               # [sha3(contract deployer), 21000000]
+sstore                                                  # []
+
+# Store code
+# ----------
+%push(code)                                             # [code]
+dup1                                                    # [code, code]
+codesize                                                # [codesize, code, code]
+sub                                                     # [codesize - code, code]
+swap1                                                   # [code, codesize - code]
+push1 0                                                 # [0, code, codesize - code]
+swap1                                                   # [code, 0, codesize - code]
+dup3                                                    # [codesize - code, code, 0, codesize - code]
+swap1                                                   # [code, codesize - code, 0, codesize - code]
+push1 0                                                 # [0, code, codesize - code, 0, codesize - code]
+codecopy                                                # [0, codesize - code]
+return                                                  # []
+
+
+# CODE
+code:
+%include("Code.etk")
