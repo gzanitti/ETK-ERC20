@@ -1,0 +1,77 @@
+jumpdest
+caller                                                  # [caller, selector]
+dup1                                                    # [caller, caller, selector]
+push1 0                                                 # [0, caller, caller, selector]
+mstore                                                  # [caller, selector] {(0:31, caller)}
+push1 4                                                 # [4, caller, selector] {(0:31, caller)}
+calldataload                                            # [_from32, caller, selector] {(0:31, caller)}
+dup1                                                    # [_from32, _from32, caller, selector] {(0:31, caller)}
+push1 32                                                # [32, _from32, _from32, caller, selector] {(0:31, caller)}
+mstore                                                  # [_from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+push1 64                                                # [64, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+push1 0                                                 # [0, 64, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+keccak256                                               # [hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+dup1                                                    # [hash_allowance, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+push1 68                                                # [68, hash_allowance, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+calldataload                                            # [_value32, hash_allowance, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+dup1                                                    # [_value32, _value32, hash_allowance, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+
+# Check if _value <= allowance[_from]
+swap2                                                   # [hash_allowance, _value32, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+sload                                                   # [allowance, _value32, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+dup1                                                    # [allowance, allowance, _value32, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+swap2                                                   # [_value32, allowance, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+gt                                                      # [_value32 > allowance, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+%push(fail)                                             # [fail, _value32 > allowance, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+jumpi
+
+# Check if _value <= balanceOf[_from]
+push1 32                                                # [32, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+push1 32                                                # [32, 32, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+keccak256                                               # [hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+dup1                                                    # [hash_from, hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+sload                                                   # [balanceOf_from, hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+dup3                                                    # [_value32, balanceOf_from, hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+swap1                                                   # [balanceOf_from, _value32, hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+gt                                                      # [balanceOf_from > _value32, hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+%push(fail)                                             # [fail, balanceOf_from > _value32, hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+jumpi
+
+# Update allowance
+dup3                                                    # [_value32, hash_from, allowance, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+swap2                                                   # [allowance, _value32, hash_from, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)} 
+sub                                                     # [allowance - _value32, hash_from, _value32, hash_allowance, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+swap3                                                   # [hash_allowance,  allowance - _value32, hash_from, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+sstore                                                  # [hash_from, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+
+# Update balanceOf[from]
+dup1                                                    # [hash_from, hash_from, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+sload                                                   # [balanceOf_from, hash_from, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+dup3                                                    # [_value32, balanceOf_from, hash_from, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+swap1                                                   # [balanceOf_from, _value32, hash_from, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+sub                                                     # [balanceOf_from - _value32, hash_from, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+swap2                                                   # [hash_from, balanceOf_from - _value32, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+sstore                                                  # [_value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+
+# Update balanceOf[to]
+push1 36                                                # [36, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+calldataload                                            # [_to32, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+dup1                                                    # [_to32, _to32, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+push1 0                                                 # [0, _to32, _to32, _value32, _from32, caller, selector] {(0:31, caller), (32:63, _from32)}
+mstore                                                  # [_to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+push1 32                                                # [32, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+push1 0                                                 # [0, 32, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+keccak256                                               # [hash_to, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+dup1                                                    # [hash_to, hash_to, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+sload                                                   # [balanceOf_to, hash_to, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+dup3                                                    # [_value32, balanceOf_to, hash_to, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+add                                                     # [balanceOf_to + _value32, hash_to, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+swap1                                                   # [hash_to, balanceOf_to + _value32, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+sstore                                                  # [_to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+
+push32 1                                                # [1, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+push1 0                                                 # [0, 1, _to32, _value32, _from32, caller, selector] {(0:31, to), (32:63, _from32)}
+mstore                                                  # [_to32, _value32, _from32, caller, selector] {(0:31, 1), (32:63, _from32)}
+push1 32                                                # [32, _to32, _value32, _from32, caller, selector] {(0:31, 1), (32:63, _from32)}
+push1 0                                                 # [0, 32, _to32, _value32, _from32, caller, selector] {(0:31, 1), (32:63, _from32)}
+return

@@ -10,26 +10,30 @@ shr		      	                                        # [selector]
 
 %import("JumpTable.etk")
 
+name:                                                   # name() public view returns (string)
 %import("functions/Name.etk")                                                
 
+symbol:                                                 # symbol() public view returns (string)
 %import("functions/Symbol.etk")
 
+decimals:                                               # decimals() public view returns (uint8)
 %import("functions/Decimals.etk")
 
+totalSupply:                                            # totalSupply() public view returns (uint256)
 %import("functions/TotalSupply.etk")
 
+balanceOf:                                              # balanceOf(address _owner) public view returns (uint256 balance)
 %import("functions/BalanceOf.etk")
 
+transfer:                                               # transfer(address _to, uint256 _value) public returns (bool success)
 %import("functions/Transfer.etk")
 
 transferFrom:                                           # transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
-jumpdest
+%import("functions/TransferFrom.etk")
 
-push1 32
-push1 0
-return
-
+approve:                                                # approve(address _spender, uint256 _value) public returns (bool success)
 %import("functions/Approve.etk")
 
+allowance:                                              # allowance(address _owner, address _spender) public view returns (uint256 remaining)
 %import("functions/Allowance.etk")
 

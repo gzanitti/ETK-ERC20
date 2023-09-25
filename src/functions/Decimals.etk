@@ -1,4 +1,3 @@
-decimals:                                               # decimals() public view returns (uint8)
 jumpdest
 push1 2                                                 # [2, selector]
 sload                                                   # [decimals, selector]

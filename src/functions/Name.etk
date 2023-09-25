@@ -1,4 +1,3 @@
-name:                                                   # name() public view returns (string)
 jumpdest
 push1 0                                                 # [0, selector]
 sload                                                   # [name, selector]

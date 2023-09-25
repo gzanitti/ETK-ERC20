@@ -1,4 +1,3 @@
-approve:                                                # approve(address _spender, uint256 _value) public returns (bool success)
 jumpdest
 caller                                                  # [caller, selector]
 push1 0                                                 # [0, caller, selector]

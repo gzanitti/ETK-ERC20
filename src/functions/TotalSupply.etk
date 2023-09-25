@@ -1,4 +1,3 @@
-totalSupply:                                            # totalSupply() public view returns (uint256)
 jumpdest
 push1 3                                                 # [3, selector]
 sload                                                   # [totalSupply, selector]
