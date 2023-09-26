@@ -8,8 +8,8 @@ push1 4                                                 # [4, _value, selector] 
 calldataload                                            # [_spender32, _value, selector] {(0:31, caller)}
 push1 32                                                # [32, _spender32, _value, selector] {(0:31, caller)}
 mstore                                                  # [_value, selector] {(0:31, caller), (32:63, _spender32)}
-push1 0                                                 # [0, _value, selector] {(0:31, caller), (32:63, _spender32)}
-push1 64                                                # [64, 0, _value, selector] {(0:31, caller), (32:63, _spender32)}
+push1 64                                                # [64, _value, selector] {(0:31, caller), (32:63, _spender32)}
+push1 0                                                 # [0, 64, _value, selector] {(0:31, caller), (32:63, _spender32)}
 keccak256                                               # [hash, _value, selector]
 sstore                                                  # [selector]
 

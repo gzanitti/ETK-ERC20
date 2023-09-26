@@ -5,10 +5,10 @@ push1 0                                                 # [0, _owner32, selector
 mstore                                                  # [selector] {(0:31, _owner32)}
 push1 36                                                # [36, selector] {(0:31, _owner32)}
 calldataload                                            # [_spender32, selector] {(0:31, _owner32)}
-push1 31                                                # [32, _spender32, selector] {(0:31, _owner32)}
+push1 32                                                # [32, _spender32, selector] {(0:31, _owner32)}
 mstore                                                  # [selector] {(0:31, _owner32), (32:63, _spender32)}
-push1 0                                                 # [0, selector] {(0:31, _owner32), (32:63, _spender32)}
-push1 64                                                # [64, 0, selector] {(0:31, _owner32), (32:63, _spender32)}
+push1 64                                                # [64, selector] {(0:31, _owner32), (32:63, _spender32)}
+push1 0                                                 # [0, 64, selector] {(0:31, _owner32), (32:63, _spender32)}
 keccak256                                               # [hash, selector]
 sload                                                   # [remaining, selector]
 push1 0                                                 # [0, remaining, selector]

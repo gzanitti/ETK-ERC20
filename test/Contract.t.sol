@@ -166,3 +166,4 @@ contract ContractTest is Test {
         assertEq(token.balanceOf(user1), 20999999e18);
         assertEq(token.balanceOf(user2), 1e18);
     }
+}
