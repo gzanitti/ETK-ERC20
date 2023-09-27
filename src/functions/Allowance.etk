@@ -7,9 +7,7 @@ push1 36                                                # [36, selector] {(0:31,
 calldataload                                            # [_spender32, selector] {(0:31, _owner32)}
 push1 32                                                # [32, _spender32, selector] {(0:31, _owner32)}
 mstore                                                  # [selector] {(0:31, _owner32), (32:63, _spender32)}
-push1 64                                                # [64, selector] {(0:31, _owner32), (32:63, _spender32)}
-push1 0                                                 # [0, 64, selector] {(0:31, _owner32), (32:63, _spender32)}
-keccak256                                               # [hash, selector]
+%keccak(0, 64)                                          # [hash, selector]
 sload                                                   # [remaining, selector]
 push1 0                                                 # [0, remaining, selector]
 mstore                                                  # [selector] {(0:31, remaining)}

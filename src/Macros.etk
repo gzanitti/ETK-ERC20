@@ -1,0 +1,13 @@
+%macro set_return_ok()
+    push32 1
+    push1 0
+    mstore
+    push1 32
+    push1 0
+%end
+
+%macro keccak(offset, size)
+    push1 $size
+    push1 $offset
+    keccak256
+%end
